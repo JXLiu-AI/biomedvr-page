@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="BioMedVR: the first Visual-Reprogramming framework for biomedical imaging, with a Mixture-of-Prompt Experts architecture and LLM-generated Confusion-Aware Attributes that explicitly suppress false-positive alignment in fine-grained medical recognition.">
+  <meta name="keywords" content="BioMedVR, Visual Reprogramming, Mixture of Prompt Experts, MoPE, Confusion-Aware Attributes, CLIP, BiomedCLIP, Vision-Language Models, Few-Shot Medical Classification, ECCV 2026">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BioMedVR: Confusion-Aware Mixture-of-Prompt Experts for Biomedical Visual Reprogramming (ECCV 2026)</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .gain  { color: #1f7a1f; font-weight: 600; }
+    .drop  { color: #b03a2e; font-weight: 600; }
+    .best  { font-weight: 700; }
+    table.compact td, table.compact th { padding: 0.35em 0.6em; font-size: 0.92em; }
+    .author-block a { color: inherit; text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+
+<!-- =========== HERO =========== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">
+            BioMedVR: Confusion-Aware Mixture-of-Prompt Experts<br>for Biomedical Visual Reprogramming
+          </h1>
+          <h2 class="subtitle has-text-centered" style="color:#666;">ECCV 2026</h2>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://scholar.google.com.hk/citations?user=LLVGPzcAAAAJ&hl=zh-CN">Jiaxiang Liu</a><sup>1,2</sup>,</span>
+            <span class="author-block">Tianxiang Hu<sup>2</sup>,</span>
+            <span class="author-block">Juwei Guan<sup>3</sup>,</span>
+            <span class="author-block">Yujie Wu<sup>4</sup>,</span>
+            <span class="author-block">Yusong Wang<sup>5</sup>,</span>
+            <span class="author-block">Yao Mu<sup>6</sup>,</span>
+            <span class="author-block"><a href="https://zzlab.org.cn/">Zuozhu Liu</a><sup>2</sup>,</span>
+            <span class="author-block">Mingkun Xu<sup>1</sup></span>
+          </div>
+
+          <div class="is-size-6 publication-authors" style="color:#777; margin-top:0.5rem;">
+            <span><sup>1</sup>Guangdong Institute of Intelligence Science and Technology &nbsp;</span>
+            <span><sup>2</sup>Zhejiang University &nbsp;</span>
+            <span><sup>3</sup>Southeast University &nbsp;</span>
+            <span><sup>4</sup>The Hong Kong Polytechnic University &nbsp;</span>
+            <span><sup>5</sup>Institute of Science Tokyo &nbsp;</span>
+            <span><sup>6</sup>Shanghai Jiao Tong University</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/coming-soon"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="./static/main-v3_cameraready.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/JXLiu-AI/BioMedVR"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#BibTeX"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-quote-left"></i></span>
+                  <span>BibTeX</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========== TEASER FIG =========== -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="./static/images/fig1_motivation.png"
+           alt="BioMedVR motivation — confusion-aware visual reprogramming"
+           style="width: 100%; max-width: 820px; margin: 0 auto; display: block;"/>
+      <p class="has-text-centered" style="margin-top: 0.8rem; color:#555; font-size: 0.95em; max-width: 820px; margin-left:auto; margin-right:auto;">
+        (a) A cataract-specific description scores highly for the visually similar
+        class <i>glaucoma</i>, exposing CLIP's confusion in fine-grained medical
+        recognition.&nbsp; (b) Existing prompt-learning methods (left) only model
+        positive cues; <b>BioMedVR</b> (right) explicitly adds a
+        <span style="color:#1f77b4;">negative expert</span> guided by LLM-generated
+        <i>confusion-aware attributes</i>, balanced by adaptive gating.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========== ABSTRACT =========== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Recent advances in vision–language models (VLMs) such as CLIP have demonstrated strong generalization across natural-image domains. However, adapting these models to biomedical imaging is non-trivial: full-model fine-tuning is computationally expensive, while medical data are often scarce and exhibit subtle, fine-grained inter-class differences, making parameter-efficient adaptation particularly critical.
+          </p>
+          <p>
+            <b>Visual Reprogramming (VR)</b> offers a parameter-efficient alternative by injecting learnable perturbations into the input space, but existing VR approaches for VLMs mainly focus on positive class prompts and overlook confusing negatives, leading to miscalibrated predictions in fine-grained medical scenarios.
+          </p>
+          <p>
+            We present <b>BioMedVR</b>, the first VR-based framework for biomedical imaging, enabling few-shot adaptation of pretrained VLMs through compact learnable VR modules. To mitigate class confusion, we introduce a <b>Confusion Minimization Mechanism</b> that leverages LLM-generated <i>confusion-aware attributes</i> together with a <b>Confusion-Suppression Loss</b> to explicitly reduce false-positive alignment. The designed <b>Mixture-of-Prompt Experts (MoPE)</b> combines a positive expert for main-class discrimination and a negative expert for confusion suppression, balanced via adaptive gating.
+          </p>
+          <p>
+            Extensive experiments on <b>18 datasets</b>—11 biomedical and 7 natural-image benchmarks—demonstrate that BioMedVR achieves superior accuracy and generalization, effectively bridging VR and VLMs in biomedical domains.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========== METHOD =========== -->
+<section class="section" style="background-color:#fafafa;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Method overview</h2>
+    <img src="./static/images/fig2_pipeline.png" alt="BioMedVR MoPE pipeline"
+         style="width: 100%; max-width: 1100px; margin: 0 auto; display: block;"/>
+    <p class="has-text-centered" style="margin-top: 0.8rem; color:#555; font-size: 0.95em; max-width: 1100px; margin-left:auto; margin-right:auto;">
+      <b>BioMedVR pipeline.</b>
+      Two compact, input-space VR programs (δ<sup>+</sup>, δ<sup>−</sup>) are
+      injected into the image. Their CLIP embeddings are scored against
+      class-level <span style="color:#d62728;">positive attributes</span> and
+      class-level <span style="color:#1f77b4;">confusion-aware attributes</span>
+      (LLM-generated). Adaptive gating fuses the two experts and a
+      <b>Confusion-Suppression Loss</b> pulls the predicted score away from the
+      confusing negatives. The CLIP backbone stays <i>frozen</i> throughout — only
+      δ<sup>+</sup>, δ<sup>−</sup> and the gating vector are learned (≈ 300 K params).
+    </p>
+  </div>
+</section>
+
+
+<!-- =========== MAIN RESULTS — Table 1 =========== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Main results · 11 biomedical benchmarks (Table 1)</h2>
+    <p class="has-text-centered" style="color:#666; margin-bottom: 1rem;">
+      16-shot accuracy (%) with ViT-B/16 CLIP backbone — best in <b>bold</b>.
+      <br>
+      BioMedVR improves over the prior VR / prompt-learning state of the art by
+      <span class="gain">+3 to +10 points</span> on confusion-prone datasets such
+      as <i>Knee X-ray</i> and <i>DermaMNIST</i>.
+    </p>
+
+    <div style="overflow-x: auto;">
+    <table class="table is-striped is-hoverable is-fullwidth compact has-text-centered">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>BUSI</th><th>Knee X-ray</th><th>Kvasir</th><th>LungColon</th>
+          <th>OCTMNIST</th><th>BTMRI</th><th>CHMNIST</th><th>COVID-19</th>
+          <th>CT-Kidney</th><th>DermaMNIST</th><th>Retina</th><th>Avg.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="13" style="background:#f5f5f5; font-size:0.85em; padding:0.25em;">Few-shot · 16-shot</td></tr>
+        <tr><td>CoOp</td>     <td>62.3</td><td>27.5</td><td>74.6</td><td>80.6</td><td>67.6</td><td>79.2</td><td>76.7</td><td>73.0</td><td>81.6</td><td>43.6</td><td>27.4</td><td>63.6</td></tr>
+        <tr><td>CoCoOp</td>   <td>64.4</td><td>30.6</td><td>77.2</td><td>89.4</td><td>69.2</td><td>80.4</td><td>71.5</td><td>76.2</td><td>78.6</td><td>44.6</td><td>52.5</td><td>66.6</td></tr>
+        <tr><td>BiomedCoOp</td><td>69.4</td><td>30.6</td><td>77.7</td><td>91.5</td><td>72.6</td><td>81.6</td><td>76.9</td><td>77.4</td><td>80.2</td><td>50.9</td><td>59.9</td><td>71.5</td></tr>
+        <tr><td>VP</td>       <td>70.9</td><td>41.2</td><td>75.2</td><td>90.8</td><td>65.3</td><td>61.8</td><td>70.8</td><td>67.3</td><td>67.6</td><td>64.6</td><td>74.8</td><td>68.2</td></tr>
+        <tr><td>AR</td>       <td>75.4</td><td>39.6</td><td>79.2</td><td>94.3</td><td>72.5</td><td>73.5</td><td>83.9</td><td>76.3</td><td>72.5</td><td>59.6</td><td>73.5</td><td>72.6</td></tr>
+        <tr><td>AttrVR</td>   <td>76.0</td><td>33.6</td><td>79.5</td><td>93.8</td><td>80.4</td><td>76.2</td><td>85.4</td><td>71.0</td><td>71.6</td><td>62.1</td><td>71.5</td><td>72.8</td></tr>
+        <tr style="background-color:#f0f7ff;">
+          <td><b>BioMedVR (ours)</b></td>
+          <td class="best">82.6</td><td class="best">45.7</td><td class="best">80.2</td><td class="best">94.7</td>
+          <td class="best">80.3</td><td class="best">81.7</td><td class="best">84.5</td><td class="best">77.4</td>
+          <td class="best">74.0</td><td class="best">65.3</td><td class="best">74.1</td>
+          <td class="best">76.4</td>
+        </tr>
+        <tr style="background-color:#f0f7ff; font-size:0.85em;">
+          <td>Δ vs. AttrVR</td>
+          <td class="gain">+6.6</td><td class="gain">+12.1</td><td class="gain">+0.7</td><td class="gain">+0.9</td>
+          <td class="drop">−0.1</td><td class="gain">+5.5</td><td class="drop">−0.9</td><td class="gain">+6.4</td>
+          <td class="gain">+2.4</td><td class="gain">+3.2</td><td class="gain">+2.6</td>
+          <td class="gain">+3.6</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p style="color:#666; font-size: 0.9em; margin-top: 0.8rem;">
+      Averaged across all 11 datasets, BioMedVR achieves <b>76.4 %</b> top-1 accuracy
+      — a <span class="gain">+3.6 pp</span> improvement over the strongest
+      prior VR method (AttrVR), and <span class="gain">+4.9 pp</span> over the
+      strongest prompt-learning baseline (BiomedCoOp). See the paper for
+      Tables&nbsp;2&nbsp;(training cost) and 3&nbsp;(7 natural-image benchmarks).
+    </p>
+  </div>
+</section>
+
+
+<!-- =========== SAMPLE EFFICIENCY =========== -->
+<section class="section" style="background-color:#fafafa;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Sample efficiency</h2>
+    <img src="./static/images/fig_fewshot.png" alt="Few-shot scaling on BUSI / Knee X-ray / Kvasir"
+         style="width: 100%; max-width: 1100px; margin: 0 auto; display: block;"/>
+    <p class="has-text-centered" style="margin-top: 0.8rem; color:#555; font-size: 0.95em; max-width: 1100px; margin-left:auto; margin-right:auto;">
+      BioMedVR is competitive even with as few as <b>4 samples per class</b> and
+      saturates faster than AttrVR and BiomedCoOp as more shots are added —
+      especially valuable in data-scarce clinical settings.
+    </p>
+  </div>
+</section>
+
+
+<!-- =========== QUALITATIVE — Figure 7 =========== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Confusion-aware attributes in action</h2>
+    <img src="./static/images/fig_confusion.png" alt="Per-class examples of positive vs confusion-aware attributes"
+         style="width: 100%; max-width: 1100px; margin: 0 auto; display: block;"/>
+    <p class="has-text-centered" style="margin-top: 0.8rem; color:#555; font-size: 0.95em; max-width: 1100px; margin-left:auto; margin-right:auto;">
+      For each medical class, BioMedVR builds two types of textual prompts:
+      <span style="color:#d62728;"><b>positive attributes</b></span> that describe
+      discriminative visual cues (e.g. "heterogeneous enhancement, necrosis" for
+      <i>kidney tumour</i>), and LLM-generated
+      <span style="color:#1f77b4;"><b>confusion-aware attributes</b></span> that
+      mimic the visually similar but semantically wrong class (e.g. "well-defined
+      fluid-filled lesion" for <i>cyst kidney</i>). The negative expert is trained
+      to push these confusing cues <i>away</i>, sharpening differential diagnosis.
+    </p>
+  </div>
+</section>
+
+
+<!-- =========== BIBTEX =========== -->
+<section class="section" id="BibTeX" style="background-color:#fafafa;">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <pre><code>@inproceedings{liu2026biomedvr,
+  title     = {{BioMedVR}: Confusion-Aware Mixture-of-Prompt Experts for
+               Biomedical Visual Reprogramming},
+  author    = {Liu, Jiaxiang and Hu, Tianxiang and Guan, Juwei and Wu, Yujie
+               and Wang, Yusong and Mu, Yao and Liu, Zuozhu and Xu, Mingkun},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            Page source adapted from the
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> template,
+            licensed under
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+          </p>
+          <p>
+            Code: <a href="https://github.com/JXLiu-AI/BioMedVR">github.com/JXLiu-AI/BioMedVR</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
